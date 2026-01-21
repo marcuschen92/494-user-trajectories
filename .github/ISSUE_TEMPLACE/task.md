@@ -1,11 +1,12 @@
 ---
 name: Task
 about: A task assignment
-title: ''
+title: 'Pull Request'
 labels: task
-assignees: ''
+assignees: 'Trisha Janappareddi'
 ---
 
 ## Description
+Git pull?
 
 ## Instructions
