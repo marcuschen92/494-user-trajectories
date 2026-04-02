@@ -1,5 +1,5 @@
 # Secrets
-**/secrets/**
+**/secrets/
 secrets/
 
 # But okay to include templates
@@ -7,6 +7,8 @@ secrets/
 !**/secrets/*.template
 
 # Python environments
+venv/
+__pycache__/
 **/venv/
 **/__pycache__/
 **/uv.lock
@@ -15,9 +17,6 @@ secrets/
 __marimo__/
 examples/__marimo__/
 students/**/__marimo__/
-uv.lock
-pyproject.toml
-.python-version
 
 # OS files
 **/.DS_Store
@@ -26,30 +25,16 @@ pyproject.toml
 # Logs
 logs/
 
-# Ignore local dataset
-dataset 1.29/
-
-uv.lock
-pyproject.toml
-.python-version
-*.parquet
-secrets/
-
-# Student archives (do not commit)
-students/**/Archive-2/**
-students/**/archive-2/**
-
 # Local datasets
 =======
-data/*.parquet
-ratings_with_features.csv
-
+students/**/Archive-2/**
+students/**/archive-2/**
+**/*.parquet
+**/ratings_with_features.csv
 **/dataset 1.29/
 **/data/local/notes-00000.tsv
 dataset 2.24/
 **/dataset 2.24/
-students/frecesca-wang/issue47/*.parquet
-*.parquet
 data/renault_partisanship_labels.csv
 data/2026-02-27-note_status_records.csv
-data - 3.17/
+**/data - 3.17/
