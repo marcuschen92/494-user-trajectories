@@ -22,11 +22,6 @@ def _(Path):
 
 
 @app.cell
-def _():
-    return
-
-
-@app.cell
 def _(DATA_DIR, pl):
     def _enrich_with_scores(
         notes: pl.DataFrame, ratings: pl.DataFrame,
@@ -104,7 +99,7 @@ def _(DATA_DIR, pl):
             .unique()
             .collect()
         )
-    
+
         notes = notes.join(
             tweet_authors.rename({"post_id": "tweetId", "author_id": "tweet_author_id"}),
             on="tweetId",
@@ -149,6 +144,17 @@ def _(DATA_DIR, pl):
     notes = _enrich_with_tweet_author_ids(notes=notes)
     notes = _enrich_with_post_lang(notes=notes)
     return notes, renault
+
+
+@app.cell
+def _(DATA_DIR, notes):
+    (
+        notes
+        .select("tweet_author_id")
+        .unique()
+        .write_csv(DATA_DIR / "tweet_author_ids.csv")
+    )
+    return
 
 
 @app.cell
@@ -205,16 +211,14 @@ def _(pl):
 
 
 @app.cell
-def _(notes):
-    notes
+def _():
     return
 
 
 @app.cell
 def _(ideologies, notes, pl, renault):
-    (
+    noteIdeo = (
         notes
-        .filter(pl.col("tweet_lang") == "en")
         .join(ideologies.with_columns(ideoAvailable=pl.lit(True)), 
               on="tweet_author_id", how="left", coalesce=True, validate="m:1")
         .join(renault.select("note_id","party").with_columns(renaultAvailable=pl.lit(True)),
@@ -223,17 +227,29 @@ def _(ideologies, notes, pl, renault):
         .with_columns(createdAtMonth = pl.col("createdAtDt").dt.strftime("%Y-%m"))
         .with_columns(ideoAvailable=pl.col("ideoAvailable").fill_null(False))
         .with_columns(renaultAvailable=pl.col("renaultAvailable").fill_null(False))
-        # .filter(~pl.col("ideoAvailable"))
+    )
+    return
+
+
+@app.cell
+def _():
+    return
+
+
+@app.cell
+def _():
+    (
+
         # .select(["tweet_author_id"])
         # .filter(pl.col("tweet_author_id").is_not_null())
         # .unique()
 
-        .group_by("createdAtMonth")
-        .agg(n=pl.len(), 
-             nWithIdeo=pl.col("ideoAvailable").sum(), pctWithIdeo=pl.col("ideoAvailable").mean(),
-                nWithRenault=pl.col("renaultAvailable").sum(), pctWithRenault=pl.col("renaultAvailable").mean()
-            )
-        .sort("createdAtMonth")
+        # .group_by("createdAtMonth")
+        # .agg(n=pl.len(), 
+        #      nWithIdeo=pl.col("ideoAvailable").sum(), pctWithIdeo=pl.col("ideoAvailable").mean(),
+        #         nWithRenault=pl.col("renaultAvailable").sum(), pctWithRenault=pl.col("renaultAvailable").mean()
+        #     )
+        # .sort("createdAtMonth")
 
 
         # .group_by(pl.lit(1))
