@@ -24,20 +24,14 @@ def _cast_ids(df: pl.DataFrame) -> pl.DataFrame:
     id_columns = [
         column
         for column in df.columns
-        if (
-            column.lower() == "post_id"
-            or column.lower() == "tweet_author_id"
-            or column.lower() == "noteid"
-            or column.lower() == "note_id"
-            or column.lower() == "tweetid"
-            or column.lower() == "tweet_id"
-            or column.lower().endswith("authorid")
-            or column.lower().endswith("author_id")
-            or column.lower().endswith("userid")
-            or column.lower().endswith("user_id")
-            or column.lower().endswith("participantid")
-            or column.lower().endswith("participant_id")
-        )
+        if column in {
+            "post_id", "tweet_id", "tweet_author_id", "tweet_author_id_renault",
+            "noteId", "note_id", "tweetId",
+            "author_id", "authorId",
+            "userId", "user_id",
+            "participantId", "participant_id",
+            "noteAuthorParticipantId", "raterParticipantId", "requesterParticipantId",
+        }
     ]
     if not id_columns:
         return df
