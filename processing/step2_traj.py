@@ -118,14 +118,14 @@ if __name__ == "__main__":
         negFactorRatedNotHelpful=(_neg_factor & _rated_not_helpful).sum(),
 
         # % correct among +/- factor notes rated helpful/not helpful
-        pctCorrectPosFactorHelpful=_ever_crh.filter(_pos_factor & _rated_helpful).mean(),
-        pctCorrectPosFactorNotHelpful=_never_crh.filter(_pos_factor & _rated_not_helpful).mean(),
-        pctCorrectNegFactorHelpful=_ever_crh.filter(_neg_factor & _rated_helpful).mean(),
-        pctCorrectNegFactorNotHelpful=_never_crh.filter(_neg_factor & _rated_not_helpful).mean(),
+        propCorrectPosFactorHelpful=_ever_crh.filter(_pos_factor & _rated_helpful).mean(),
+        propCorrectPosFactorNotHelpful=_never_crh.filter(_pos_factor & _rated_not_helpful).mean(),
+        propCorrectNegFactorHelpful=_ever_crh.filter(_neg_factor & _rated_helpful).mean(),
+        propCorrectNegFactorNotHelpful=_never_crh.filter(_neg_factor & _rated_not_helpful).mean(),
 
         # % correct among helpful/not-helpful ratings overall
-        pctHelpfulRatingsCorrect=_ever_crh.filter(_rated_helpful).mean(),
-        pctNotHelpfulRatingsCorrect=_never_crh.filter(_rated_not_helpful).mean(),
+        propHelpfulRatingsCorrect=_ever_crh.filter(_rated_helpful).mean(),
+        propNotHelpfulRatingsCorrect=_never_crh.filter(_rated_not_helpful).mean(),
 
         uniqueDaysRated=pl.col("ratingDate").n_unique(),
         avgPostsRatedPerDay=pl.len() / pl.col("ratingDate").n_unique(),
@@ -165,6 +165,8 @@ if __name__ == "__main__":
         repAlignedRatings=pl.col("proRepRatings") + pl.col("antiDemRatings"),
     ).with_columns(
         demAlignedLessRepAlignedRatings=pl.col("demAlignedRatings").cast(pl.Int64) - pl.col("repAlignedRatings").cast(pl.Int64),
+        propPoliticalRatingsRepAligned=pl.col("repAlignedRatings") / (pl.col("repAlignedRatings") + pl.col("demAlignedRatings")),
+        propRatingsOnPoliticalNotes=(pl.col("repAlignedRatings") + pl.col("demAlignedRatings")) / pl.col("notesRated")
     ).sort("raterParticipantId", "userMonth")
     logger.info(f"Aggregated user ratings: {len(user_ratings):,} rows")
 
@@ -173,8 +175,8 @@ if __name__ == "__main__":
         notesRequested=pl.len(),
         numRequestsResultingInCrh   = pl.col("requestResultedInCrh") .sum(),
         numRequestsResultingInNote  = pl.col("requestResultedInNote").sum(),
-        pctRequestResultedInNote    = pl.col("requestResultedInNote").mean(),
-        pctRequestResultedInCrh     = pl.col("requestResultedInCrh") .mean(),
+        propRequestResultedInNote    = pl.col("requestResultedInNote").mean(),
+        propRequestResultedInCrh     = pl.col("requestResultedInCrh") .mean(),
     ).sort("requesterParticipantId", "userMonth")
     logger.info(f"Aggregated user requests: {len(user_requests):,} rows")
 
