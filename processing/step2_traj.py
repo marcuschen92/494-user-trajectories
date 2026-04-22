@@ -95,7 +95,7 @@ if __name__ == "__main__":
         demAlignedNotes=pl.col("proDemNotes") + pl.col("antiRepNotes"),
         repAlignedNotes=pl.col("proRepNotes") + pl.col("antiDemNotes"),
     ).with_columns(
-        demAlignedLessRepAlignedNotes=pl.col("demAlignedNotes") - pl.col("repAlignedNotes"),
+        demAlignedLessRepAlignedNotes=pl.col("demAlignedNotes").cast(pl.Int64) - pl.col("repAlignedNotes").cast(pl.Int64),
     ).sort("noteAuthorParticipantId", "userMonth")
     logger.info(f"Aggregated user notes: {len(user_notes):,} rows")
 
@@ -164,7 +164,7 @@ if __name__ == "__main__":
         demAlignedRatings=pl.col("proDemRatings") + pl.col("antiRepRatings"),
         repAlignedRatings=pl.col("proRepRatings") + pl.col("antiDemRatings"),
     ).with_columns(
-        demAlignedLessRepAlignedRatings=pl.col("demAlignedRatings") - pl.col("repAlignedRatings"),
+        demAlignedLessRepAlignedRatings=pl.col("demAlignedRatings").cast(pl.Int64) - pl.col("repAlignedRatings").cast(pl.Int64),
     ).sort("raterParticipantId", "userMonth")
     logger.info(f"Aggregated user ratings: {len(user_ratings):,} rows")
 
