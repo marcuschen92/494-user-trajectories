@@ -305,7 +305,7 @@ def _enrich_ratings_with_note_data(
     ratings: pl.DataFrame, notes: pl.DataFrame,
 ) -> pl.DataFrame:
     ratings = ratings.join(
-        notes.select("noteId", "noteEverCrh", "noteFinalFactor", "noteFinalIntercept", "topic", "tweet_author_party", "tweet_lang"),
+        notes.select("noteId", "tweet_author_party", "tweet_lang", "classification"),
         on="noteId",
         how="left",
         validate="m:1"
