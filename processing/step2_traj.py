@@ -96,6 +96,8 @@ if __name__ == "__main__":
         repAlignedNotes=pl.col("proRepNotes") + pl.col("antiDemNotes"),
     ).with_columns(
         demAlignedLessRepAlignedNotes=pl.col("demAlignedNotes").cast(pl.Int64) - pl.col("repAlignedNotes").cast(pl.Int64),
+        propPoliticalNotesWrittenRepAligned=pl.col("repAlignedNotes") / (pl.col("repAlignedNotes") + pl.col("demAlignedNotes")),
+        propNotesWrittenOnPoliticalTargets=(pl.col("notesOnDems") + pl.col("notesOnReps")) / pl.col("notesWritten"),
     ).sort("noteAuthorParticipantId", "userMonth")
     logger.info(f"Aggregated user notes: {len(user_notes):,} rows")
 
